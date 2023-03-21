@@ -91,8 +91,42 @@ public class ProductDaoJDBC implements ProductDao {
 
 	@Override
 	public List<Product> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT p.Id, p.Name, p.Price, p.Section, p.Supplier_id, "
+			        + "s.Name as SupName "
+			        + "FROM product p INNER JOIN supplier s "
+			        + "ON s.Id = p.Supplier_id "
+			        + "ORDER BY Name");
+			
+			rs = st.executeQuery();
+			
+			List<Product> list = new ArrayList<>();
+			Map<Integer, Supplier> map = new HashMap<>();
+			
+			while (rs.next()) {
+				
+				Supplier sup = map.get(rs.getInt("Supplier_id"));
+				
+				if (sup == null) {
+					sup = instantiateSupplier(rs);
+					map.put(rs.getInt("Supplier_id"), sup);
+				}
+				
+				Product obj = instantiateProduct(rs, sup);
+				list.add(obj);
+			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
