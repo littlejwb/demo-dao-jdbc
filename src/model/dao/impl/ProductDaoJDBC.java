@@ -54,16 +54,8 @@ public class ProductDaoJDBC implements ProductDao {
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Supplier sup = new Supplier();
-				sup.setId(rs.getInt("Supplier_Id"));
-				sup.setName(rs.getString("SupName"));
-				
-				Product obj = new Product();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setPrice(rs.getDouble("Price"));
-				obj.setSection(rs.getString("Section"));
-				obj.setSupplier(sup);
+				Supplier sup = instantiateDepartment(rs);
+				Product obj = instantiateProduct(rs, sup);
 				return obj;
 			}
 			return null;
@@ -77,10 +69,26 @@ public class ProductDaoJDBC implements ProductDao {
 		}
 	}
 
+	private Product instantiateProduct(ResultSet rs, Supplier sup) throws SQLException {
+		Product obj = new Product();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setPrice(rs.getDouble("Price"));
+		obj.setSection(rs.getString("Section"));
+		obj.setSupplier(sup);
+		return obj;
+	}
+
+	private Supplier instantiateDepartment(ResultSet rs) throws SQLException {
+		Supplier sup = new Supplier();
+		sup.setId(rs.getInt("Supplier_Id"));
+		sup.setName(rs.getString("SupName"));
+		return sup;
+	}
+
 	@Override
 	public List<Product> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

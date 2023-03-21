@@ -10,8 +10,8 @@ public class Program {
 		
 		ProductDao productDao = DaoFactory.createProductDao();
 		
+		System.out.println("=== TESTE 1: product findById ===");
 		Product prod = productDao.findById(3);
-		
 		System.out.println(prod);
 		
 	}
