@@ -37,5 +37,12 @@ public class Program {
 		Product newProd = new Product(null, "Toluene", 12.5, "Solvent", sup);
 		productDao.insert(newProd);
 		System.out.println("Inserted! New id = " + newProd.getId());
+		System.out.println();
+		
+		System.out.println("=== TESTE 5: product update ===");
+		prod = productDao.findById(1);
+		prod.setName("Alcohol 70");
+		productDao.update(prod);
+		System.out.println("Update completed!");
 	}
 }

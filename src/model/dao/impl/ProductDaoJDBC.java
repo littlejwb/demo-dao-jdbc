@@ -64,8 +64,27 @@ public class ProductDaoJDBC implements ProductDao {
 
 	@Override
 	public void update(Product prod) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE product "
+					+ "SET Name = ?, Price = ?, Section = ?, Supplier_id = ? "
+					+ "WHERE Id = ?");
+			
+			st.setString(1, prod.getName());
+			st.setDouble(2, prod.getPrice());
+			st.setString(3, prod.getSection());
+			st.setInt(4, prod.getSupplier().getId());
+			st.setInt(5, prod.getId());
+			
+			st.executeUpdate();
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}		
 	}
 
 	@Override
