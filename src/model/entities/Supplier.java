@@ -53,6 +53,6 @@ public class Supplier implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Supplier [id=" + id + ", name=" + name + "]";
+		return "Id = " + id + ", name = " + name;
 	}
 }
